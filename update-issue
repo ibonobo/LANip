@@ -1,0 +1,6 @@
+#!/bin/sh
+# http://serverfault.com/questions/209599/how-to-setup-etc-issues-to-show-the-ip-address-for-eth0
+# /etc/network/if-up.d/update-issue
+PREFIX="Local IP addresses:"
+IPADDRS=$(hostname -I | tr " " "\n" | grep -v "^$" | sort -t . -k 1,1n -k 2,2n -k 3,3n -k 4,4n | tr "\n" " ")
+perl -i -p -0777 -e "s/^$PREFIX[^\n]*\n\n//m; s/$/\n$PREFIX $IPADDRS\n/ if length('$IPADDRS')>6" /etc/issue
